@@ -65,7 +65,7 @@ parse_metalink(char *input_file)
   metalink_checksum_t **checksums;
   metalink_chunk_checksum_t *chunk_checksum;
   metalink_piece_hash_t **piece_hashes;
-  mlink *mlink;
+  mlink *mLink;
   err = metalink_parse_file (input_file, &metalink);
   if(err != 0 || !metalink)
     {
@@ -78,11 +78,11 @@ parse_metalink(char *input_file)
     return NULL;
   }
 
-  mlink = malloc (sizeof(mlink));
-  mlink->identity = (metalink->identity ? xstrdup (metalink->identity) : NULL);
-  mlink->tags = (metalink->tags ? xstrdup (metalink->tags) : NULL);
-  mlink->files = NULL;
-  mlink->num_of_files = 0;
+  mLink = malloc (sizeof *mLink);
+  mLink->identity = (metalink->identity ? xstrdup (metalink->identity) : NULL);
+  mLink->tags = (metalink->tags ? xstrdup (metalink->tags) : NULL);
+  mLink->files = NULL;
+  mLink->num_of_files = 0;
 
   for (files = metalink->files; *files; ++files)
     {
@@ -104,9 +104,9 @@ parse_metalink(char *input_file)
         }
 
       file = malloc(sizeof(mlink_file));
-      ++(mlink->num_of_files);
-      file -> next = (mlink->files);
-      (mlink->files) = file;
+      ++(mLink->num_of_files);
+      file -> next = (mLink->files);
+      (mLink->files) = file;
 
       file->name = xstrdup ((*files)->name);
       file->size = (*files)->size;
@@ -196,7 +196,7 @@ parse_metalink(char *input_file)
     }
 
   metalink_delete(metalink);
-  return mlink;
+  return mLink;
 }
 
 /* Elect resouces so that only the URLs with type HTTP and FTP (i.e. the
